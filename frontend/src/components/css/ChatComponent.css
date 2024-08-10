@@ -1,0 +1,113 @@
+.message {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ai-message {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+.user-message {
+  background-color: #4a4a4a;
+  color: #ffffff;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, #1a1a1a, #121212);
+}
+
+.flex-1 {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  padding: 1rem;
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  placeholder: #888888;
+}
+
+button[type="submit"] {
+  padding: 1rem;
+  background: linear-gradient(to right, #4a90e2, #9013fe);
+  color: #ffffff;
+  border: none;
+  border-radius: 0 0.5rem 0.5rem 0;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(to right, #357ab8, #6d0fbf);
+}
+
+button[type="submit"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(144, 19, 254, 0.5);
+}
+
+.dark {
+    color-scheme: dark;
+}
+
+.dark .bg-gray-100 {
+    background-color: #121212;
+}
+
+.dark .bg-gray-900 {
+    background-color: #121212;
+}
+
+.dark .bg-gray-800 {
+    background-color: #121212;
+}
+
+.dark .bg-gray-700 {
+    background-color: #121212;
+}
+
+.dark .bg-gray-600 {
+    background-color: #121212;
+}
+
+.dark .text-gray-900 {
+    color: #e0e0e0;
+}
+
+.dark .text-gray-100 {
+    color: #e0e0e0;
+}
+
+@media (max-width: 768px) {
+    .flex {
+        flex-direction: column;
+    }
+    
+    .navbar {
+        width: 100%;
+        height: auto;
+    }
+    
+    .navbar.collapsed {
+        height: 60px;
+    }
+}
