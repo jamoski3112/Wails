@@ -20,7 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({ isOpen }) => {
   return (
     <nav className={`w-64 h-screen flex flex-col bg-light-secondary-background dark:bg-dark-secondary-background text-light-foreground dark:text-dark-foreground fixed left-0 top-0 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="p-4">
-        <Button className="w-full justify-start bg-light-accent dark:bg-dark-accent text-white hover:bg-light-accent-hover dark:hover:bg-dark-accent-hover">
+        <Button className="w-full justify-start bg-light-accent dark:bg-dark-accent text-white hover:bg-light-accent-hover dark:hover:bg-dark-accent-hover rounded-full">
           <FiPlus className="mr-2" /> New Chat
         </Button>
       </div>

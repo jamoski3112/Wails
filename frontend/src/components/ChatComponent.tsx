@@ -3,8 +3,6 @@ import { FiSend } from 'react-icons/fi';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { getChatResponse } from '../services/dify';
-import marked from 'marked';
-import DOMPurify from 'dompurify';
 
 interface Message {
   text: string;
@@ -61,7 +59,7 @@ const ChatComponent: React.FC = () => {
   }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-light-background dark:bg-dark-background">
+    <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-light-background to-light-secondary-background dark:from-dark-background dark:to-dark-secondary-background">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
           <div key={index} className={`flex ${message.isAI ? 'justify-start' : 'justify-end'} animate-fade-in`}>
@@ -80,7 +78,7 @@ const ChatComponent: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="text-sm" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(message.text.replace(/\n/g, '<br />'))) }} />
+                    <p className="text-sm">{message.text}</p>
                     <span className="text-xs text-gray-500">{message.timestamp}</span>
                   </>
                 )}
