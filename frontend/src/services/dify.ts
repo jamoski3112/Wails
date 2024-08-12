@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_KEY = 'app-IMTyEfQRjZVwj0kHPQCSVJPp';
-const API_URL = 'http://localhost/v1/chat-messages';
+const API_KEY = 'app-sKn6LN01spNmFe0FKz1hHjUY';
+const API_URL = 'http://10.100.140.232/v1/chat-messages';
 
 export const getChatResponse = async (message: string) => {
   const userName = localStorage.getItem('userName');

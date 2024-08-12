@@ -3,11 +3,15 @@ import { FiSend } from 'react-icons/fi';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { getChatResponse } from '../services/dify';
+import marked from 'marked';
+import DOMPurify from 'dompurify';
 
 interface Message {
   text: string;
   isAI: boolean;
   isLoading?: boolean;
+  timestamp?: string;
+  avatarUrl?: string;
 }
 
 interface ChatComponentProps {
@@ -16,7 +20,7 @@ interface ChatComponentProps {
 
 const ChatComponent: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { text: "Hello! How can I assist you today?", isAI: true }
+    { text: "Hello! How can I assist you today?", isAI: true, timestamp: new Date().toLocaleTimeString(), avatarUrl: "/src/assets/images/robot.png" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +29,12 @@ const ChatComponent: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages(prev => [...prev, { text: input, isAI: false }, { text: '', isAI: true, isLoading: true }]);
+      const timestamp = new Date().toLocaleTimeString();
+      setMessages(prev => [
+        ...prev, 
+        { text: input, isAI: false, timestamp, avatarUrl: "/src/assets/images/user.png" }, 
+        { text: '', isAI: true, isLoading: true, avatarUrl: "/src/assets/images/robot.png" }
+      ]);
       setInput('');
       setIsLoading(true);
 
@@ -33,13 +42,13 @@ const ChatComponent: React.FC = () => {
         const response = await getChatResponse(input);
         setMessages(prev => [
           ...prev.filter(msg => !msg.isLoading),
-          { text: response, isAI: true }
+          { text: response, isAI: true, timestamp: new Date().toLocaleTimeString(), avatarUrl: "/src/assets/images/robot.png" }
         ]);
       } catch (error) {
         console.error('Error fetching response:', error);
         setMessages(prev => [
           ...prev.filter(msg => !msg.isLoading),
-          { text: "Sorry, I couldn't process your request. Please try again.", isAI: true }
+          { text: "Sorry, I couldn't process your request. Please try again.", isAI: true, timestamp: new Date().toLocaleTimeString(), avatarUrl: "/src/assets/images/robot.png" }
         ]);
       } finally {
         setIsLoading(false);
@@ -52,24 +61,30 @@ const ChatComponent: React.FC = () => {
   }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-light-background to-light-secondary-background dark:from-dark-background dark:to-dark-secondary-background">
+    <div className="flex-1 flex flex-col overflow-hidden bg-light-background dark:bg-dark-background">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
           <div key={index} className={`flex ${message.isAI ? 'justify-start' : 'justify-end'} animate-fade-in`}>
-            <div className={`max-w-[75%] p-3 rounded-2xl ${
-              message.isAI 
-                ? 'bg-light-secondary-background dark:bg-dark-secondary-background' 
-                : 'bg-gradient-to-r from-light-accent to-light-accent-hover dark:from-dark-accent dark:to-dark-accent-hover text-white'
-            } shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out`}>
-              {message.isLoading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                </div>
-              ) : (
-                <p className="text-sm">{message.text}</p>
-              )}
+            <div className="flex items-start space-x-2">
+              <img src={message.avatarUrl} alt="avatar" className="w-8 h-8 rounded-full" />
+              <div className={`max-w-[75%] p-4 rounded-3xl ${
+                message.isAI 
+                  ? 'bg-light-secondary-background dark:bg-dark-secondary-background' 
+                  : 'bg-gradient-to-r from-light-accent to-light-accent-hover dark:from-dark-accent dark:to-dark-accent-hover text-white'
+              } shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out`}>
+                {message.isLoading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-sm" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked(message.text.replace(/\n/g, '<br />'))) }} />
+                    <span className="text-xs text-gray-500">{message.timestamp}</span>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         ))}
